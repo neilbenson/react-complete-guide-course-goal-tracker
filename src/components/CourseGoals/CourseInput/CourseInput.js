@@ -1,0 +1,42 @@
+import React, { useState } from 'react';
+
+import Button from '../../UI/Button/Button';
+import './CourseInput.css';
+
+const CourseInput = props => {
+  const [enteredValue, setEnteredValue] = useState('');
+  const [isValid, setIsValid] = useState(true);
+
+  const goalInputChangeHandler = event => {
+    // reset default style on input
+    if (event.target.value.trim().length > 0) {
+      setIsValid(true);
+    }
+    setEnteredValue(event.target.value);
+  };
+
+  const formSubmitHandler = event => {
+    event.preventDefault();
+    if (enteredValue.trim().length === 0) {
+      setIsValid(false);
+      return;
+    }
+    props.onAddGoal(enteredValue);
+  };
+
+  const showErrorColour = (errorColour = 'red', defaultColour = 'black') => {
+    return !isValid ? errorColour : defaultColour;
+  }
+
+  return (
+    <form onSubmit={formSubmitHandler}>
+      <div className="form-control">
+        <label style={{color: showErrorColour()}}>Course Goal</label>
+        <input style={{borderColor: showErrorColour('red','#ccc'), background: showErrorColour('salmon', 'transparent')}} type="text" onChange={goalInputChangeHandler} />
+      </div>
+      <Button type="submit">Add Goal</Button>
+    </form>
+  );
+};
+
+export default CourseInput;
